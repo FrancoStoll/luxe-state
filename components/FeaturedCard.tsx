@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Property } from "@/data/mockProperties";
+import { Property } from "@/lib/properties";
 
 interface FeaturedCardProps {
  property: Property;
