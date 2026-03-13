@@ -3,12 +3,13 @@ import { createServerClient } from '@/lib/supabase/server';
 export interface Property {
   id: string;
   title: string;
+  slug: string;
   location: string;
   price: string;
   beds: number;
   baths: number;
   area: string;
-  image: string;
+  images: string[];
   badge: string;
   badge_color: 'mosque' | 'nordic-dark' | 'white' | null;
   is_featured: boolean;
@@ -57,4 +58,19 @@ export async function getProperties(
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   return { properties: data ?? [], totalCount, totalPages };
+}
+
+export async function getPropertyBySlug(slug: string): Promise<Property | null> {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('properties')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
+  if (error) {
+    console.error('Error fetching property by slug:', error);
+    return null;
+  }
+  return data;
 }

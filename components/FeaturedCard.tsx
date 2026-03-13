@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Property } from "@/lib/properties";
 
 interface FeaturedCardProps {
@@ -7,13 +8,13 @@ interface FeaturedCardProps {
 
 export default function FeaturedCard({ property }: FeaturedCardProps) {
  return (
- <div className="group relative rounded-xl overflow-hidden shadow-soft bg-white cursor-pointer">
+ <Link href={`/propiedades/${property.slug}`} className="block h-full group relative rounded-xl overflow-hidden shadow-soft bg-white cursor-pointer">
  <div className="aspect-[4/3] w-full overflow-hidden relative">
  <Image 
  sizes="(max-width: 768px) 100vw, 50vw"
  alt={property.title} 
  className="object-cover transition-transform duration-700 group-hover:scale-105" 
- src={property.image}
+ src={property.images[0] || ""}
  fill
  />
  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic-dark ">
@@ -48,6 +49,6 @@ export default function FeaturedCard({ property }: FeaturedCardProps) {
  </div>
  </div>
  </div>
- </div>
+ </Link>
  );
 }
