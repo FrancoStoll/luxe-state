@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { createClient } from "@/lib/supabase/server";
 import AdminNavbar from "@/components/AdminNavbar";
+import { redirect } from "next/navigation";
 
 export default async function AdminLayout({
   children,
@@ -11,6 +12,23 @@ export default async function AdminLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // If not logged in, redirect to login
+  if (!user) {
+    redirect('/login');
+  }
+
+  // Check admin role
+  const { data: roleData } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', user.id)
+    .single();
+
+  if (roleData?.role !== 'admin') {
+    redirect('/');
+  }
+
   const fullName = user?.user_metadata?.full_name || "Alex Morgan";
 
   return (
