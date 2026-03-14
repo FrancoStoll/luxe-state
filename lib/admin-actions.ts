@@ -52,6 +52,8 @@ export async function createProperty(formData: FormData) {
     year_built: formData.get('year_built') ? Number(formData.get('year_built')) : null,
     parking: Number(formData.get('parking') || 0),
     amenities,
+    latitude: formData.get('latitude') ? Number(formData.get('latitude')) : null,
+    longitude: formData.get('longitude') ? Number(formData.get('longitude')) : null,
   };
 
   const { data, error } = await supabase
@@ -108,6 +110,8 @@ export async function updateProperty(id: string, formData: FormData) {
     property_type: formData.get('property_type')?.toString(),
     year_built: formData.get('year_built') ? Number(formData.get('year_built')) : null,
     parking: formData.get('parking') !== null ? Number(formData.get('parking')) : undefined,
+    latitude: formData.get('latitude') ? Number(formData.get('latitude')) : undefined,
+    longitude: formData.get('longitude') ? Number(formData.get('longitude')) : undefined,
   };
 
   if (formData.has('is_featured')) {

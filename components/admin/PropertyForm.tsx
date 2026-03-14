@@ -320,6 +320,32 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                 type="text"
               />
             </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="latitude">Latitude</label>
+                <input 
+                  name="latitude"
+                  id="latitude" 
+                  defaultValue={initialData?.latitude}
+                  className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm font-sf-pro shadow-sm" 
+                  placeholder="e.g. -34.6037" 
+                  type="number"
+                  step="any"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-nordic mb-1.5 font-sf-pro" htmlFor="longitude">Longitude</label>
+                <input 
+                  name="longitude"
+                  id="longitude" 
+                  defaultValue={initialData?.longitude}
+                  className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm font-sf-pro shadow-sm" 
+                  placeholder="e.g. -58.3816" 
+                  type="number"
+                  step="any"
+                />
+              </div>
+            </div>
             {/* Keeping the map placeholder from original code design */}
             <div className="relative h-48 w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200 group">
               <img alt="Map view placeholder" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAS55FY7gfArnlTpNsdabJk9nBO5uQJgOwIsl8beO34JRZ9dMmjLoIkTuTUO72Y9L5tUmQqTReQWebUWadAWwLusGmRQiIict5sqY--yRaOxuYpTzfR4vv4RKh1ex6oxY64e0kbSeMudNO6pv-gG0WzVWs-pDfvQm5IoTQ1mT-tAV49LDkXAHZl317M1-D7eZw3N8o2ExKWTgg6oMAXOFVnkApIqnb7TZHekwSw8pWQxpJV2EKI8EQKQbQXJaSbjN8gB1n8b-ueWj8" />

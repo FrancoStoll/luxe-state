@@ -19,6 +19,8 @@ export interface Property {
   year_built?: number;
   parking?: number;
   amenities?: string[];
+  latitude?: number;
+  longitude?: number;
 }
 
 const PAGE_SIZE = 8;
