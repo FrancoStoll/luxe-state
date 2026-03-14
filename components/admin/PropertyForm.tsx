@@ -6,6 +6,13 @@ import { Property } from '@/lib/properties';
 import { createClient } from '@/lib/supabase/client';
 import { createProperty, updateProperty } from '@/lib/admin-actions';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const DynamicMap = dynamic(() => import('@/components/admin/PropertyMap'), {
+  ssr: false,
+  loading: () => <div className="h-full w-full flex items-center justify-center bg-gray-100">Cargando mapa...</div>
+});
+
 
 interface PropertyFormProps {
   initialData?: Property;
@@ -26,6 +33,11 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
   const [beds, setBeds] = useState(initialData?.beds || 3);
   const [baths, setBaths] = useState(initialData?.baths || 2);
   const [parking, setParking] = useState(initialData?.parking || 1);
+
+  // Map coordinates
+  const [latitude, setLatitude] = useState<number | ''>(initialData?.latitude ?? '');
+  const [longitude, setLongitude] = useState<number | ''>(initialData?.longitude ?? '');
+
 
   // Amenities
   const predefinedAmenities = [
@@ -326,7 +338,8 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                 <input 
                   name="latitude"
                   id="latitude" 
-                  defaultValue={initialData?.latitude}
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value === '' ? '' : parseFloat(e.target.value))}
                   className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm font-sf-pro shadow-sm" 
                   placeholder="e.g. -34.6037" 
                   type="number"
@@ -338,7 +351,8 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                 <input 
                   name="longitude"
                   id="longitude" 
-                  defaultValue={initialData?.longitude}
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value === '' ? '' : parseFloat(e.target.value))}
                   className="w-full px-4 py-2.5 rounded-md border-gray-200 bg-white text-nordic placeholder-gray-400 focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm font-sf-pro shadow-sm" 
                   placeholder="e.g. -58.3816" 
                   type="number"
@@ -346,14 +360,20 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                 />
               </div>
             </div>
-            {/* Keeping the map placeholder from original code design */}
+            {/* Map display */}
             <div className="relative h-48 w-full rounded-lg overflow-hidden bg-gray-100 border border-gray-200 group">
-              <img alt="Map view placeholder" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAS55FY7gfArnlTpNsdabJk9nBO5uQJgOwIsl8beO34JRZ9dMmjLoIkTuTUO72Y9L5tUmQqTReQWebUWadAWwLusGmRQiIict5sqY--yRaOxuYpTzfR4vv4RKh1ex6oxY64e0kbSeMudNO6pv-gG0WzVWs-pDfvQm5IoTQ1mT-tAV49LDkXAHZl317M1-D7eZw3N8o2ExKWTgg6oMAXOFVnkApIqnb7TZHekwSw8pWQxpJV2EKI8EQKQbQXJaSbjN8gB1n8b-ueWj8" />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="bg-white/90 text-nordic px-3 py-1.5 rounded shadow-sm backdrop-blur-sm text-xs font-bold font-sf-pro flex items-center gap-1">
-                  <span className="material-icons text-sm text-primary">map</span> Preview
-                </span>
-              </div>
+              {(latitude !== '' && longitude !== '' && !isNaN(latitude) && !isNaN(longitude)) ? (
+                <DynamicMap lat={latitude} lng={longitude} />
+              ) : (
+                <>
+                  <img alt="Map view placeholder" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAS55FY7gfArnlTpNsdabJk9nBO5uQJgOwLicensed/AB6AXuAS55FY7gfArnlTpNsdabJk9nBO5uQJgOwIsl8beO34JRZ9dMmjLoIkTuTUO72Y9L5tUmQqTReQWebUWadAWwLusGmRQiIict5sqY--yRaOxuYpTzfR4vv4RKh1ex6oxY64e0kbSeMudNO6pv-gG0WzVWs-pDfvQm5IoTQ1mT-tAV49LDkXAHZl317M1-D7eZw3N8o2ExKWTgg6oMAXOFVnkApIqnb7TZHekwSw8pWQxpJV2EKI8EQKQbQXJaSbjN8gB1n8b-ueWj8" />
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span className="bg-white/90 text-nordic px-3 py-1.5 rounded shadow-sm backdrop-blur-sm text-xs font-bold font-sf-pro flex items-center gap-1">
+                      <span className="material-icons text-sm text-primary">map</span> Preview
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

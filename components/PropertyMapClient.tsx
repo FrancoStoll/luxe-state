@@ -15,19 +15,20 @@ L.Icon.Default.mergeOptions({
 
 interface PropertyMapProps {
   locationString: string; 
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
-export default function PropertyMapClient({ locationString }: PropertyMapProps) {
+export default function PropertyMapClient({ locationString, latitude, longitude }: PropertyMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !mapRef.current) return;
 
-    // For mockup purposes, we'll use a hardcoded coordinate,
-    // in a real app we would geocode `locationString`
-    const lat = 37.4419;
-    const lng = -122.1430;
+    // Use property coordinates, otherwise fallback to mockup
+    const lat = latitude ?? -34.6037;
+    const lng = longitude ?? -58.3816;
 
     if (!mapInstance.current) {
       mapInstance.current = L.map(mapRef.current, {
@@ -61,7 +62,7 @@ export default function PropertyMapClient({ locationString }: PropertyMapProps) 
         mapInstance.current = null;
       }
     };
-  }, [locationString]);
+  }, [locationString, latitude, longitude]);
 
   return (
     <div className="relative w-full h-[300px] rounded-lg overflow-hidden bg-slate-100 z-0 border border-slate-200">

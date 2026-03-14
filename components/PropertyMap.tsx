@@ -13,6 +13,8 @@ const DynamicMap = dynamic(() => import("./PropertyMapClient"), {
 
 interface PropertyMapProps {
   locationString: string;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 export default function PropertyMap(props: PropertyMapProps) {

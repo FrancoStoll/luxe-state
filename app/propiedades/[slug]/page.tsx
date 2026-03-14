@@ -124,7 +124,7 @@ export default async function PropertyDetailsPage({
 
             {/* Map Card */}
             <div className="bg-white p-2 rounded-xl shadow-sm border border-mosque/5 h-[300px]">
-               <PropertyMap locationString={property.location} />
+               <PropertyMap locationString={property.location} latitude={property.latitude} longitude={property.longitude} />
             </div>
             
           </div>
