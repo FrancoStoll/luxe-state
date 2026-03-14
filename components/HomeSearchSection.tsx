@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import FilterModal from "./FilterModal";
+import { useTranslation } from "@/lib/contexts/LanguageContext";
 
 export default function HomeSearchSection() {
+  const { t } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -34,9 +36,9 @@ export default function HomeSearchSection() {
     <section className="py-12 md:py-16">
       <div className="max-w-3xl mx-auto text-center space-y-8">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-nordic-dark leading-tight">
-          Find your{" "}
+          {t('home.title')}
           <span className="relative inline-block">
-            <span className="relative z-10 font-medium">sanctuary</span>
+            <span className="relative z-10 font-medium">{t('home.sanctuary')}</span>
             <span className="absolute bottom-2 left-0 w-full h-3 bg-mosque/20 -rotate-1 z-0"></span>
           </span>
           .
@@ -49,7 +51,7 @@ export default function HomeSearchSection() {
           </div>
           <input
             className="block w-full pl-12 pr-12 py-4 rounded-xl border-none bg-white text-nordic-dark shadow-soft placeholder-nordic-muted/60 focus:outline-none focus:ring-2 focus:ring-mosque focus:bg-white transition-all text-lg"
-            placeholder="Search by city, neighborhood, or address..."
+            placeholder={t('home.search_placeholder')}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -59,7 +61,7 @@ export default function HomeSearchSection() {
             onClick={handleSearch}
             className="absolute inset-y-2 right-2 px-6 bg-mosque hover:bg-mosque/90 text-white font-medium rounded-lg transition-colors flex items-center justify-center shadow-lg shadow-mosque/20 cursor-pointer"
           >
-            Search
+            {t('home.search_button')}
           </button>
         </div>
         <div className="flex items-center justify-center gap-3 overflow-x-auto hide-scroll py-2 px-4 -mx-4">
@@ -73,7 +75,7 @@ export default function HomeSearchSection() {
                   : "bg-white border border-nordic-dark/5 text-nordic-muted hover:text-nordic-dark hover:border-mosque/50 hover:bg-mosque/5"
               }`}
             >
-              {type}
+              {t(`home.types.${type}`)}
             </button>
           ))}
           <div className="w-px h-6 bg-nordic-dark/10 mx-2"></div>
@@ -81,7 +83,7 @@ export default function HomeSearchSection() {
             onClick={() => setIsFilterModalOpen(true)}
             className="whitespace-nowrap flex items-center gap-1 px-4 py-2 rounded-full text-nordic-dark font-medium text-sm hover:bg-black/5 transition-colors cursor-pointer"
           >
-            <span className="material-icons text-base">tune</span> Filters
+            <span className="material-icons text-base">tune</span> {t('home.filters')}
           </button>
         </div>
       </div>

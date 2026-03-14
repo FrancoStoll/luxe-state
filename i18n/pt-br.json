@@ -1,0 +1,33 @@
+{
+  "nav": {
+    "buy": "Comprar",
+    "rent": "Alugar",
+    "sell": "Vender",
+    "saved": "Salvos"
+  },
+  "home": {
+    "title": "Encontre o seu ",
+    "sanctuary": "santuário",
+    "search_placeholder": "Buscar por cidade, bairro ou endereço...",
+    "search_button": "Buscar",
+    "filters": "Filtros",
+    "types": {
+      "All": "Tudo",
+      "Buy": "Comprar",
+      "Rent": "Alugar",
+      "Villa": "Mansão",
+      "Penthouse": "Cobertura"
+    },
+    "featured": "Coleções em Destaque",
+    "featured_subtitle": "Propriedades selecionadas para o olhar exigente.",
+    "view_all": "Ver tudo",
+    "new_market": "Novidades no Mercado",
+    "new_market_subtitle": "Novas oportunidades adicionadas esta semana."
+  },
+  "common": {
+    "per_month": "/mês",
+    "sqm": "m²",
+    "beds": "Dorms",
+    "baths": "Banhos"
+  }
+}

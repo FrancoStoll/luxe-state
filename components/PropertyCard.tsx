@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Property } from "@/lib/properties";
+import { useTranslation } from "@/lib/contexts/LanguageContext";
 
 interface PropertyCardProps {
   property: Property;
@@ -8,6 +11,7 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({ property, className = "" }: PropertyCardProps) {
+  const { t } = useTranslation();
   // Map our custom badge color strings to tailwind classes
   const badgeClasses: Record<string, string> = {
     'mosque': 'bg-mosque/90 text-white',
@@ -40,7 +44,7 @@ export default function PropertyCard({ property, className = "" }: PropertyCardP
         <div className="p-4 flex flex-col flex-grow">
           <div className="flex justify-between items-baseline mb-2">
             <h3 className="font-bold text-lg text-nordic-dark">
-              {property.price}{isRent ? <span className="text-sm font-normal text-nordic-muted">/mo</span> : null}
+              {property.price}{isRent ? <span className="text-sm font-normal text-nordic-muted">{t('common.per_month')}</span> : null}
             </h3>
           </div>
           <h4 className="text-nordic-dark font-medium truncate mb-1">{property.title}</h4>
@@ -48,13 +52,13 @@ export default function PropertyCard({ property, className = "" }: PropertyCardP
           
           <div className="mt-auto flex items-center justify-between pt-3 border-t border-gray-100 ">
             <div className="flex items-center gap-1 text-nordic-muted text-xs">
-              <span className="material-icons text-sm text-mosque/80">king_bed</span> {property.beds}
+              <span className="material-icons text-sm text-mosque/80">king_bed</span> {property.beds} {t('common.beds')}
             </div>
             <div className="flex items-center gap-1 text-nordic-muted text-xs">
-              <span className="material-icons text-sm text-mosque/80">bathtub</span> {property.baths}
+              <span className="material-icons text-sm text-mosque/80">bathtub</span> {property.baths} {t('common.baths')}
             </div>
             <div className="flex items-center gap-1 text-nordic-muted text-xs">
-              <span className="material-icons text-sm text-mosque/80">square_foot</span> {property.area}m²
+              <span className="material-icons text-sm text-mosque/80">square_foot</span> {property.area}{t('common.sqm')}
             </div>
           </div>
         </div>

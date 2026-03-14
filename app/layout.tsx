@@ -13,19 +13,23 @@ export const metadata: Metadata = {
  description: "Find your sanctuary with Luxe Estate. Premium real estate listings and luxury homes.",
 };
 
+import { LanguageProvider } from "@/lib/contexts/LanguageContext";
+
 export default function RootLayout({
- children,
+  children,
 }: Readonly<{
- children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
- return (
- <html lang="en">
- <body
- className={`${inter.variable} antialiased selection:bg-mosque selection:text-white`}
- >
- <Navbar />
- {children}
- </body>
- </html>
- );
+  return (
+    <html lang="en">
+      <body
+        className={`${inter.variable} antialiased selection:bg-mosque selection:text-white`}
+      >
+        <LanguageProvider>
+          <Navbar />
+          {children}
+        </LanguageProvider>
+      </body>
+    </html>
+  );
 }

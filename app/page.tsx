@@ -8,7 +8,10 @@ interface HomeProps {
   searchParams: Promise<{ page?: string; q?: string; type?: string }>;
 }
 
+import { getTranslation } from "@/lib/i18n-server";
+
 export default async function Home({ searchParams }: HomeProps) {
+  const { t } = await getTranslation();
   const params = await searchParams;
   const currentPage = Math.max(1, parseInt(params.page ?? "1", 10));
   const query = params.q || "";
@@ -28,17 +31,17 @@ export default async function Home({ searchParams }: HomeProps) {
           <div className="flex items-end justify-between mb-8">
             <div>
               <h2 className="text-2xl font-light text-nordic-dark ">
-                Featured Collections
+                {t('home.featured')}
               </h2>
               <p className="text-nordic-muted mt-1 text-sm">
-                Curated properties for the discerning eye.
+                {t('home.featured_subtitle')}
               </p>
             </div>
             <a
               className="hidden sm:flex items-center gap-1 text-sm font-medium text-mosque hover:opacity-70 transition-opacity"
               href="#"
             >
-              View all <span className="material-icons text-sm">arrow_forward</span>
+              {t('home.view_all')} <span className="material-icons text-sm">arrow_forward</span>
             </a>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -53,22 +56,25 @@ export default async function Home({ searchParams }: HomeProps) {
         <div className="flex items-end justify-between mb-8">
           <div>
             <h2 className="text-2xl font-light text-nordic-dark ">
-              New in Market
+              {t('home.new_market')}
             </h2>
             <p className="text-nordic-muted mt-1 text-sm">
-              Fresh opportunities added this week.
+              {t('home.new_market_subtitle')}
             </p>
           </div>
           <div className="hidden md:flex bg-white p-1 rounded-lg">
-            <button className="px-4 py-1.5 rounded-md text-sm font-medium bg-nordic-dark text-white shadow-sm">
-              All
-            </button>
-            <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark ">
-              Buy
-            </button>
-            <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark ">
-              Rent
-            </button>
+            {["All", "Buy", "Rent"].map((filterType) => (
+               <button 
+                 key={filterType}
+                 className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                   type === filterType 
+                     ? "bg-nordic-dark text-white shadow-sm" 
+                     : "text-nordic-muted hover:text-nordic-dark"
+                 }`}
+               >
+                 {t(`home.types.${filterType}`)}
+               </button>
+            ))}
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

@@ -1,0 +1,33 @@
+{
+  "nav": {
+    "buy": "Comprar",
+    "rent": "Alquilar",
+    "sell": "Vender",
+    "saved": "Guardados"
+  },
+  "home": {
+    "title": "Encuentra tu ",
+    "sanctuary": "santuario",
+    "search_placeholder": "Busca por ciudad, barrio o dirección...",
+    "search_button": "Buscar",
+    "filters": "Filtros",
+    "types": {
+      "All": "Todo",
+      "Buy": "Comprar",
+      "Rent": "Alquilar",
+      "Villa": "Villa",
+      "Penthouse": "Ático"
+    },
+    "featured": "Colecciones Destacadas",
+    "featured_subtitle": "Propiedades curadas para el ojo exigente.",
+    "view_all": "Ver todo",
+    "new_market": "Novedades en el mercado",
+    "new_market_subtitle": "Nuevas oportunidades añadidas esta semana."
+  },
+  "common": {
+    "per_month": "/mes",
+    "sqm": "m²",
+    "beds": "Hab",
+    "baths": "Baños"
+  }
+}
