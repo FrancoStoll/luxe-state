@@ -1,38 +1,58 @@
 import { createClient } from '@/lib/supabase/server';
 import { Property } from '@/lib/properties';
+import Link from 'next/link';
+import Image from 'next/image';
+import { getTranslation } from '@/lib/i18n-server';
 
-export default async function AdminPropertiesPage() {
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function AdminPropertiesPage({ searchParams }: PageProps) {
   const supabase = await createClient();
+  const params = await searchParams;
+  const { t } = await getTranslation();
+
+  const pageSize = 6;
+  const page = Number(params.page) || 1;
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
   
-  // Fetch properties
-  const { data: properties, error } = await supabase
+  // Fetch properties with pagination
+  const { data: properties, count, error } = await supabase
     .from('properties')
-    .select('*')
-    .order('created_at', { ascending: false });
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(from, to);
 
   if (error) {
     console.error('Error fetching properties:', error);
   }
 
-  // Calculate some basic stats
-  const totalListings = properties?.length || 0;
-  const activeProperties = properties?.filter(p => p.badge?.toLowerCase().includes('active') || !p.badge).length || 0;
-  const pendingProperties = properties?.filter(p => p.badge?.toLowerCase().includes('pending')).length || 0;
+  const totalProperties = count || 0;
+  const totalPages = Math.ceil(totalProperties / pageSize);
+
+  // Calculate some basic stats (these remain global for now)
+  const totalListings = count || 0;
+  
+  const { data: allProps } = await supabase.from('properties').select('badge');
+  const activeProperties = allProps?.filter(p => !p.badge || p.badge?.toLowerCase().includes('active')).length || 0;
+  const pendingProperties = allProps?.filter(p => p.badge?.toLowerCase().includes('pending') || p.badge?.toLowerCase().includes('sold')).length || 0;
 
   return (
     <div className="max-w-7xl mx-auto space-y-10">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-nordic tracking-tight">My Properties</h1>
-          <p className="text-nordic-muted mt-1 text-sm">Manage your portfolio and track performance.</p>
+          <h1 className="text-3xl font-bold text-nordic tracking-tight">{t('admin.properties.title')}</h1>
+          <p className="text-nordic-muted mt-1 text-sm">{t('admin.properties.subtitle')}</p>
         </div>
         <div className="flex items-center gap-3">
           <button className="bg-white border border-nordic/10 text-nordic hover:bg-nordic/5 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-soft inline-flex items-center gap-2">
-            <span className="material-icons text-base">filter_list</span> Filter
+            <span className="material-icons text-base">filter_list</span> {t('admin.properties.filter')}
           </button>
           <button className="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-md shadow-primary/20 transition-all transform hover:-translate-y-0.5 inline-flex items-center gap-2">
-            <span className="material-icons text-base">add</span> Add New Property
+            <span className="material-icons text-base">add</span> {t('admin.properties.add_new')}
           </button>
         </div>
       </div>
@@ -41,7 +61,7 @@ export default async function AdminPropertiesPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="bg-white p-5 rounded-xl border border-primary/10 shadow-soft flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-nordic-muted">Total Listings</p>
+            <p className="text-sm font-medium text-nordic-muted">{t('admin.properties.stats.total')}</p>
             <p className="text-2xl font-bold text-nordic mt-1">{totalListings}</p>
           </div>
           <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -50,7 +70,7 @@ export default async function AdminPropertiesPage() {
         </div>
         <div className="bg-white p-5 rounded-xl border border-primary/10 shadow-soft flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-nordic-muted">Active Properties</p>
+            <p className="text-sm font-medium text-nordic-muted">{t('admin.properties.stats.active')}</p>
             <p className="text-2xl font-bold text-nordic mt-1">{activeProperties}</p>
           </div>
           <div className="h-10 w-10 rounded-full bg-hint-of-green flex items-center justify-center text-primary">
@@ -59,7 +79,7 @@ export default async function AdminPropertiesPage() {
         </div>
         <div className="bg-white p-5 rounded-xl border border-primary/10 shadow-soft flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-nordic-muted">Pending/Sold</p>
+            <p className="text-sm font-medium text-nordic-muted">{t('admin.properties.stats.pending')}</p>
             <p className="text-2xl font-bold text-nordic mt-1">{pendingProperties}</p>
           </div>
           <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
@@ -72,10 +92,10 @@ export default async function AdminPropertiesPage() {
       <div className="bg-white rounded-xl shadow-soft border border-nordic/10 overflow-hidden">
         {/* Simplified Table Header */}
         <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-nordic/5 border-b border-nordic/5 text-xs font-semibold text-nordic/50 uppercase tracking-wider">
-          <div className="col-span-6">Property Details</div>
-          <div className="col-span-2">Price</div>
-          <div className="col-span-2">Status</div>
-          <div className="col-span-2 text-right">Actions</div>
+          <div className="col-span-6">{t('admin.properties.table.details')}</div>
+          <div className="col-span-2">{t('admin.properties.table.price')}</div>
+          <div className="col-span-2">{t('admin.properties.table.status')}</div>
+          <div className="col-span-2 text-right">{t('admin.properties.table.actions')}</div>
         </div>
 
         {/* List Items */}
@@ -85,19 +105,20 @@ export default async function AdminPropertiesPage() {
               {/* Details */}
               <div className="col-span-12 md:col-span-6 flex gap-4 items-center">
                 <div className="relative h-20 w-28 shrink-0 rounded-lg overflow-hidden bg-nordic/5">
-                  <img 
+                  <Image 
                     src={property.images[0]} 
-                    alt={property.title} 
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    alt={property.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-nordic group-hover:text-primary transition-colors cursor-pointer">{property.title}</h3>
                   <p className="text-sm text-nordic-muted">{property.location}</p>
                   <div className="flex items-center gap-3 mt-1.5 text-xs text-nordic-muted/60">
-                    <span className="flex items-center gap-1"><span className="material-icons text-[14px]">bed</span> {property.beds} Beds</span>
+                    <span className="flex items-center gap-1"><span className="material-icons text-[14px]">bed</span> {property.beds} {t('common.beds')}</span>
                     <span className="w-1 h-1 rounded-full bg-nordic/10"></span>
-                    <span className="flex items-center gap-1"><span className="material-icons text-[14px]">bathtub</span> {property.baths} Baths</span>
+                    <span className="flex items-center gap-1"><span className="material-icons text-[14px]">bathtub</span> {property.baths} {t('common.baths')}</span>
                     <span className="w-1 h-1 rounded-full bg-nordic/10"></span>
                     <span>{property.area}</span>
                   </div>
@@ -150,14 +171,24 @@ export default async function AdminPropertiesPage() {
           )}
         </div>
 
-        {/* Pagination placeholder */}
+        {/* Pagination logic */}
         <div className="px-6 py-4 border-t border-nordic/5 flex items-center justify-between bg-nordic/5">
           <div className="text-sm text-nordic-muted">
-            Showing <span className="font-medium text-nordic">1</span> to <span className="font-medium text-nordic">{properties?.length || 0}</span> of <span className="font-medium text-nordic">{properties?.length || 0}</span> results
+            {t('admin.properties.pagination.showing')} <span className="font-medium text-nordic">{from + 1}</span> {t('admin.properties.pagination.to')} <span className="font-medium text-nordic">{Math.min(to + 1, totalProperties)}</span> {t('admin.properties.pagination.of')} <span className="font-medium text-nordic">{totalProperties}</span> {t('admin.properties.pagination.results')}
           </div>
           <div className="flex gap-2">
-            <button className="px-3 py-1 text-sm border border-nordic/10 rounded-md text-nordic hover:bg-white transition-colors disabled:opacity-50">Previous</button>
-            <button className="px-3 py-1 text-sm border border-nordic/10 rounded-md text-nordic hover:bg-white transition-colors disabled:opacity-50">Next</button>
+            <Link 
+              href={`/admin/properties?page=${page - 1}`}
+              className={`px-3 py-1 text-sm border border-nordic/10 rounded-md text-nordic hover:bg-white transition-colors ${page <= 1 ? 'pointer-events-none opacity-50' : ''}`}
+            >
+              {t('common.prev')}
+            </Link>
+            <Link 
+              href={`/admin/properties?page=${page + 1}`}
+              className={`px-3 py-1 text-sm border border-nordic/10 rounded-md text-nordic hover:bg-white transition-colors ${page >= totalPages ? 'pointer-events-none opacity-50' : ''}`}
+            >
+              {t('common.next')}
+            </Link>
           </div>
         </div>
       </div>

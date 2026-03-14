@@ -4,17 +4,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import LanguageSelector from './LanguageSelector';
 import { useTranslation } from '@/lib/contexts/LanguageContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
-import { signOut } from '@/app/login/actions';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const getUser = async () => {
@@ -30,6 +32,24 @@ export default function Navbar() {
 
     return () => subscription.unsubscribe();
   }, [supabase]);
+
+  // Close popover when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+        setIsPopoverOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setIsPopoverOpen(false);
+    router.push("/login");
+    router.refresh();
+  };
 
   // Hides the navbar in LoginPage and Admin pages
   if (pathname === '/login' || pathname?.startsWith('/admin')) return null;
@@ -75,23 +95,67 @@ export default function Navbar() {
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-background-light "></span>
             </button>
             
-            <div className="flex items-center gap-2 pl-2 border-l border-nordic-dark/10 ml-2">
+            <div className="flex items-center gap-2 pl-2 border-l border-nordic-dark/10 ml-2 relative" ref={popoverRef}>
               {showProfile ? (
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-nordic-dark/5 hover:ring-mosque transition-all relative">
+                <>
+                  <button 
+                    onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+                    className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden ring-2 ring-nordic-dark/5 hover:ring-mosque transition-all relative"
+                  >
                     <Image 
                       alt={user.user_metadata.full_name || "User"} 
                       className="w-full h-full object-cover" 
                       src={user.user_metadata.avatar_url || "https://www.gravatar.com/avatar/?d=mp"}
                       fill
                     />
-                  </div>
-                  <form action={signOut}>
-                    <button className="text-xs font-semibold text-nordic-dark/60 hover:text-mosque transition-colors uppercase tracking-wider">
-                      {t('nav.logout')}
-                    </button>
-                  </form>
-                </div>
+                  </button>
+
+                  {/* Popover */}
+                  {isPopoverOpen && (
+                    <div className="absolute right-0 top-full mt-3 w-64 bg-white rounded-xl shadow-xl border border-nordic-dark/5 py-2 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="px-4 py-3 border-b border-nordic-dark/5 mb-1">
+                        <p className="text-sm font-bold text-nordic-dark truncate">
+                          {user.user_metadata.full_name || user.email}
+                        </p>
+                        <p className="text-[11px] text-nordic-dark/50 font-medium truncate">
+                          {user.email}
+                        </p>
+                      </div>
+                      
+                      <div className="px-4 py-2 text-[10px] font-bold text-nordic-dark/30 uppercase tracking-widest leading-none mt-1">
+                        Admin
+                      </div>
+
+                      <Link 
+                        href="/admin/properties"
+                        onClick={() => setIsPopoverOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-nordic-dark hover:bg-nordic-dark/5 transition-colors"
+                      >
+                        <span className="material-icons text-lg text-nordic-dark/40">dashboard</span>
+                        {t('admin.nav.properties')}
+                      </Link>
+                      
+                      <Link 
+                        href="/admin/users"
+                        onClick={() => setIsPopoverOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-nordic-dark hover:bg-nordic-dark/5 transition-colors"
+                      >
+                        <span className="material-icons text-lg text-nordic-dark/40">people</span>
+                        {t('admin.nav.users')}
+                      </Link>
+
+                      <div className="h-px bg-nordic-dark/5 my-1"></div>
+                      
+                      <button 
+                        onClick={handleSignOut}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+                      >
+                        <span className="material-icons text-lg">logout</span>
+                        {t('nav.logout')}
+                      </button>
+                    </div>
+                  )}
+                </>
               ) : (
                 <Link 
                   href="/login" 

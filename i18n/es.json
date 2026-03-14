@@ -99,5 +99,60 @@
     "privacy": "Política de Privacidad",
     "terms": "Términos de Servicio",
     "help": "Centro de Ayuda"
+  },
+  "admin": {
+    "nav": {
+      "properties": "Propiedades",
+      "users": "Usuarios",
+      "sign_out": "Cerrar Sesión",
+      "role": "Agente Premium"
+    },
+    "properties": {
+      "title": "Mis Propiedades",
+      "subtitle": "Gestiona tu portafolio y sigue el rendimiento.",
+      "filter": "Filtrar",
+      "add_new": "Añadir Nueva Propiedad",
+      "stats": {
+        "total": "Listados Totales",
+        "active": "Propiedades Activas",
+        "pending": "Pendientes/Vendidas"
+      },
+      "table": {
+        "details": "Detalles de Propiedad",
+        "price": "Precio",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "pagination": {
+        "showing": "Mostrando",
+        "to": "a",
+        "of": "de",
+        "results": "resultados"
+      }
+    },
+    "users": {
+      "title": "Directorio de Usuarios",
+      "subtitle": "Gestiona el acceso y roles de los usuarios para tus propiedades.",
+      "search_placeholder": "Buscar por nombre, email...",
+      "add_user": "Añadir Usuario",
+      "tabs": {
+        "all": "Todos",
+        "agents": "Agentes",
+        "brokers": "Brokers",
+        "admins": "Admins"
+      },
+      "table": {
+        "details": "Detalles de Usuario",
+        "role_status": "Rol y Estado",
+        "member_since": "Miembro desde",
+        "actions": "Acciones"
+      },
+      "pagination": {
+        "showing": "Mostrando",
+        "to": "a",
+        "of": "de",
+        "users": "usuarios"
+      }
+    }
   }
 }

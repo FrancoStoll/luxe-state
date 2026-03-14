@@ -99,5 +99,60 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "help": "Help Center"
+  },
+  "admin": {
+    "nav": {
+      "properties": "Properties",
+      "users": "Users",
+      "sign_out": "Sign Out",
+      "role": "Premium Agent"
+    },
+    "properties": {
+      "title": "My Properties",
+      "subtitle": "Manage your portfolio and track performance.",
+      "filter": "Filter",
+      "add_new": "Add New Property",
+      "stats": {
+        "total": "Total Listings",
+        "active": "Active Properties",
+        "pending": "Pending/Sold"
+      },
+      "table": {
+        "details": "Property Details",
+        "price": "Price",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "pagination": {
+        "showing": "Showing",
+        "to": "to",
+        "of": "of",
+        "results": "results"
+      }
+    },
+    "users": {
+      "title": "User Directory",
+      "subtitle": "Manage user access and roles for your properties.",
+      "search_placeholder": "Search by name, email...",
+      "add_user": "Add User",
+      "tabs": {
+        "all": "All Users",
+        "agents": "Agents",
+        "brokers": "Brokers",
+        "admins": "Admins"
+      },
+      "table": {
+        "details": "User Details",
+        "role_status": "Role & Status",
+        "member_since": "Member Since",
+        "actions": "Actions"
+      },
+      "pagination": {
+        "showing": "Showing",
+        "to": "to",
+        "of": "of",
+        "users": "users"
+      }
+    }
   }
 }
