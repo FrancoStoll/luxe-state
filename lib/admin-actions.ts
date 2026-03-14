@@ -54,6 +54,7 @@ export async function createProperty(formData: FormData) {
     amenities,
     latitude: formData.get('latitude') ? Number(formData.get('latitude')) : null,
     longitude: formData.get('longitude') ? Number(formData.get('longitude')) : null,
+    is_active: true,
   };
 
   const { data, error } = await supabase
@@ -118,6 +119,10 @@ export async function updateProperty(id: string, formData: FormData) {
     propertyData.is_featured = formData.get('is_featured') === 'on';
   }
 
+  if (formData.has('is_active')) {
+    propertyData.is_active = formData.get('is_active') === 'on';
+  }
+
   // Only update fields that are provided
   Object.keys(propertyData).forEach(key => {
     if (propertyData[key] === undefined) {
@@ -145,6 +150,30 @@ export async function updateProperty(id: string, formData: FormData) {
 
   revalidatePath('/admin/properties');
   revalidatePath(`/admin/properties/${id}/edit`);
+  revalidatePath('/properties');
+  if (data?.slug) {
+    revalidatePath(`/properties/${data.slug}`);
+  }
+
+  return { success: true, data };
+}
+
+export async function togglePropertyStatus(id: string, currentStatus: boolean) {
+  const supabase = await createClient();
+  
+  const { data, error } = await supabase
+    .from('properties')
+    .update({ is_active: !currentStatus })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error toggling property status:', error);
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath('/admin/properties');
   revalidatePath('/properties');
   if (data?.slug) {
     revalidatePath(`/properties/${data.slug}`);

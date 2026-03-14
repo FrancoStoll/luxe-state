@@ -21,6 +21,7 @@ export interface Property {
   amenities?: string[];
   latitude?: number;
   longitude?: number;
+  is_active: boolean;
 }
 
 const PAGE_SIZE = 8;
@@ -31,6 +32,7 @@ export async function getFeaturedProperties(): Promise<Property[]> {
     .from('properties')
     .select('*')
     .eq('is_featured', true)
+    .eq('is_active', true)
     .order('created_at', { ascending: true })
     .limit(2);
 
@@ -52,7 +54,8 @@ export async function getProperties(
 
   let query = supabase
     .from('properties')
-    .select('*', { count: 'exact' });
+    .select('*', { count: 'exact' })
+    .eq('is_active', true);
 
   if (filters?.query) {
     query = query.or(`title.ilike.%${filters.query}%,location.ilike.%${filters.query}%`);

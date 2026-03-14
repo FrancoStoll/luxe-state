@@ -3,6 +3,7 @@ import { Property } from '@/lib/properties';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getTranslation } from '@/lib/i18n-server';
+import { togglePropertyStatus } from '@/lib/admin-actions';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -35,9 +36,9 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
   // Calculate some basic stats (these remain global for now)
   const totalListings = count || 0;
   
-  const { data: allProps } = await supabase.from('properties').select('badge');
-  const activeProperties = allProps?.filter(p => !p.badge || p.badge?.toLowerCase().includes('active')).length || 0;
-  const pendingProperties = allProps?.filter(p => p.badge?.toLowerCase().includes('pending') || p.badge?.toLowerCase().includes('sold')).length || 0;
+  const { data: allProps } = await supabase.from('properties').select('badge, is_active');
+  const activeProperties = allProps?.filter((p: { is_active: boolean }) => p.is_active).length || 0;
+  const pendingProperties = allProps?.filter((p: { is_active: boolean }) => !p.is_active).length || 0;
 
   return (
     <div className="max-w-7xl mx-auto space-y-10">
@@ -79,11 +80,11 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
         </div>
         <div className="bg-white p-5 rounded-xl border border-primary/10 shadow-soft flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-nordic-muted">{t('admin.properties.stats.pending')}</p>
+            <p className="text-sm font-medium text-nordic-muted">{t('admin.properties.stats.hidden')}</p>
             <p className="text-2xl font-bold text-nordic mt-1">{pendingProperties}</p>
           </div>
           <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
-            <span className="material-icons">pending</span>
+            <span className="material-icons">visibility_off</span>
           </div>
         </div>
       </div>
@@ -101,7 +102,7 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
         {/* List Items */}
         <div className="divide-y divide-nordic/5">
           {properties?.map((property: Property) => (
-            <div key={property.id} className="group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 hover:bg-nordic/5 transition-colors items-center">
+            <div key={property.id} className={`group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 hover:bg-nordic/5 transition-all items-center ${!property.is_active ? 'opacity-60 grayscale-[0.3]' : ''}`}>
               {/* Details */}
               <div className="col-span-12 md:col-span-6 flex gap-4 items-center">
                 <div className="relative h-20 w-28 shrink-0 rounded-lg overflow-hidden bg-nordic/5">
@@ -133,22 +134,29 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
 
               {/* Status */}
               <div className="col-span-6 md:col-span-2">
-                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
-                  property.badge?.toLowerCase().includes('sold') 
-                    ? 'bg-gray-100 text-gray-600 border-gray-200' 
-                    : property.badge?.toLowerCase().includes('pending')
-                      ? 'bg-orange-100 text-orange-700 border-orange-200'
-                      : 'bg-hint-of-green text-primary border-primary/10'
-                }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
+                {!property.is_active ? (
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-500 border-gray-200">
+                    <span className="material-icons text-[14px] mr-1.5">visibility_off</span>
+                    {t('admin.properties.status.hidden')}
+                  </span>
+                ) : (
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
                     property.badge?.toLowerCase().includes('sold') 
-                      ? 'bg-gray-500' 
+                      ? 'bg-gray-100 text-gray-600 border-gray-200' 
                       : property.badge?.toLowerCase().includes('pending')
-                        ? 'bg-orange-500'
-                        : 'bg-primary'
-                  }`}></span>
-                  {property.badge || 'Active'}
-                </span>
+                        ? 'bg-orange-100 text-orange-700 border-orange-200'
+                        : 'bg-hint-of-green text-primary border-primary/10'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
+                      property.badge?.toLowerCase().includes('sold') 
+                        ? 'bg-gray-500' 
+                        : property.badge?.toLowerCase().includes('pending')
+                          ? 'bg-orange-500'
+                          : 'bg-primary'
+                    }`}></span>
+                    {property.badge || 'Active'}
+                  </span>
+                )}
               </div>
 
               {/* Actions */}
@@ -156,9 +164,16 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
                 <Link href={`/admin/properties/${property.id}/edit`} className="p-2 rounded-lg text-nordic/40 hover:text-primary hover:bg-hint-of-green/30 transition-all">
                   <span className="material-icons text-xl">edit</span>
                 </Link>
-                <button className="p-2 rounded-lg text-nordic/40 hover:text-red-600 hover:bg-red-50 transition-all">
-                  <span className="material-icons text-xl">delete_outline</span>
-                </button>
+                <form action={async () => {
+                  'use server';
+                  await togglePropertyStatus(property.id, property.is_active);
+                }}>
+                  <button type="submit" className={`p-2 rounded-lg transition-all ${property.is_active ? 'text-nordic/40 hover:text-orange-600 hover:bg-orange-50' : 'text-primary hover:text-primary-dark hover:bg-hint-of-green/30'}`}>
+                    <span className="material-icons text-xl">
+                      {property.is_active ? 'visibility_off' : 'visibility'}
+                    </span>
+                  </button>
+                </form>
               </div>
             </div>
           ))}

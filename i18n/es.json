@@ -115,7 +115,12 @@
       "stats": {
         "total": "Listados Totales",
         "active": "Propiedades Activas",
-        "pending": "Pendientes/Vendidas"
+        "pending": "Pendientes/Vendidas",
+        "hidden": "Ocultas"
+      },
+      "status": {
+        "hidden": "Oculto",
+        "active": "Activo"
       },
       "table": {
         "details": "Detalles de Propiedad",

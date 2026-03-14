@@ -213,7 +213,7 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
               </div>
             </div>
 
-            <div className="pt-2">
+            <div className="pt-2 flex flex-col sm:flex-row gap-6">
               <label className="flex items-center gap-2.5 cursor-pointer group w-fit">
                 <input 
                   name="is_featured"
@@ -223,6 +223,17 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
                   type="checkbox" 
                 />
                 <span className="text-sm font-medium text-gray-700 font-sf-pro group-hover:text-nordic transition-colors">Mark as Featured Property</span>
+              </label>
+
+              <label className="flex items-center gap-2.5 cursor-pointer group w-fit">
+                <input 
+                  name="is_active"
+                  id="is_active"
+                  defaultChecked={initialData?.is_active ?? true}
+                  className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary shadow-sm" 
+                  type="checkbox" 
+                />
+                <span className="text-sm font-medium text-gray-700 font-sf-pro group-hover:text-nordic transition-colors">Propiedad Activa</span>
               </label>
             </div>
           </div>
