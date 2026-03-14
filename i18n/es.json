@@ -3,7 +3,9 @@
     "buy": "Comprar",
     "rent": "Alquilar",
     "sell": "Vender",
-    "saved": "Guardados"
+    "saved": "Guardados",
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión"
   },
   "home": {
     "title": "Encuentra tu ",
@@ -86,5 +88,16 @@
     "patio": "Patio / Terraza",
     "clear_all": "Limpiar todos los filtros",
     "show_homes": "Mostrar Casas"
+  },
+  "auth": {
+    "welcome": "Bienvenido a LuxeEstate",
+    "subtitle": "Desbloquea propiedades exclusivas en todo el mundo.",
+    "google_continue": "Continuar con Google",
+    "github_continue": "Continuar con GitHub",
+    "no_account": "¿No tienes una cuenta?",
+    "sign_up": "Regístrate",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "help": "Centro de Ayuda"
   }
 }

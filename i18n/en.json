@@ -3,7 +3,9 @@
     "buy": "Buy",
     "rent": "Rent",
     "sell": "Sell",
-    "saved": "Saved Homes"
+    "saved": "Saved Homes",
+    "login": "Login",
+    "logout": "Logout"
   },
   "home": {
     "title": "Find your ",
@@ -86,5 +88,16 @@
     "patio": "Patio / Terrace",
     "clear_all": "Clear all filters",
     "show_homes": "Show Homes"
+  },
+  "auth": {
+    "welcome": "Welcome to LuxeEstate",
+    "subtitle": "Unlock exclusive properties worldwide.",
+    "google_continue": "Continue with Google",
+    "github_continue": "Continue with GitHub",
+    "no_account": "Don't have an account?",
+    "sign_up": "Sign up",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "help": "Help Center"
   }
 }

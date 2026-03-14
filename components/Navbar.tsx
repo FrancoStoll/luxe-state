@@ -4,9 +4,30 @@ import Image from 'next/image';
 import Link from 'next/link';
 import LanguageSelector from './LanguageSelector';
 import { useTranslation } from '@/lib/contexts/LanguageContext';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { User } from '@supabase/supabase-js';
+import { signOut } from '@/app/login/actions';
 
 export default function Navbar() {
   const { t } = useTranslation();
+  const [user, setUser] = useState<User | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    getUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   return (
     <nav className="sticky top-0 z-50 bg-background-light/95 backdrop-blur-md border-b border-nordic-dark/10 ">
@@ -25,10 +46,10 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            <a className="text-mosque font-medium text-sm border-b-2 border-mosque px-1 py-1" href="#">{t('nav.buy')}</a>
-            <a className="text-nordic-dark/70 hover:text-nordic-dark font-medium text-sm hover:border-b-2 hover:border-nordic-dark/20 px-1 py-1 transition-all" href="#">{t('nav.rent')}</a>
-            <a className="text-nordic-dark/70 hover:text-nordic-dark font-medium text-sm hover:border-b-2 hover:border-nordic-dark/20 px-1 py-1 transition-all" href="#">{t('nav.sell')}</a>
-            <a className="text-nordic-dark/70 hover:text-nordic-dark font-medium text-sm hover:border-b-2 hover:border-nordic-dark/20 px-1 py-1 transition-all" href="#">{t('nav.saved')}</a>
+            <Link className="text-mosque font-medium text-sm border-b-2 border-mosque px-1 py-1" href="/">{t('nav.buy')}</Link>
+            <Link className="text-nordic-dark/70 hover:text-nordic-dark font-medium text-sm hover:border-b-2 hover:border-nordic-dark/20 px-1 py-1 transition-all" href="#">{t('nav.rent')}</Link>
+            <Link className="text-nordic-dark/70 hover:text-nordic-dark font-medium text-sm hover:border-b-2 hover:border-nordic-dark/20 px-1 py-1 transition-all" href="#">{t('nav.sell')}</Link>
+            <Link className="text-nordic-dark/70 hover:text-nordic-dark font-medium text-sm hover:border-b-2 hover:border-nordic-dark/20 px-1 py-1 transition-all" href="#">{t('nav.saved')}</Link>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -43,28 +64,45 @@ export default function Navbar() {
               <span className="material-icons">notifications_none</span>
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-background-light "></span>
             </button>
-            <button className="flex items-center gap-2 pl-2 border-l border-nordic-dark/10 ml-2">
-              <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent hover:ring-mosque transition-all relative">
-                <Image 
-                  alt="Profile" 
-                  className="w-full h-full object-cover" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAWhQZ663Bd08kmzjbOPmUk4UIxYooNONShMEFXLR-DtmVi6Oz-TiaY77SPwFk7g0OobkeZEOMvt6v29mSOD0Xm2g95WbBG3ZjWXmiABOUwGU0LOySRfVDo-JTXQ0-gtwjWxbmue0qDm91m-zEOEZwAW6iRFB1qC1bAU-wkjxm67Sbztq8w7srHkFT9bVEC86qG-FzhOBTomhAurNRmx9l8Yfqabk328NfdKuVLckgCdaPsNFE3yN65MeoRi05GA_gXIMwG4YDIeA"
-                  fill
-                />
-              </div>
-            </button>
+            
+            <div className="flex items-center gap-2 pl-2 border-l border-nordic-dark/10 ml-2">
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-nordic-dark/5 hover:ring-mosque transition-all relative">
+                    <Image 
+                      alt={user.user_metadata.full_name || "User"} 
+                      className="w-full h-full object-cover" 
+                      src={user.user_metadata.avatar_url || "https://www.gravatar.com/avatar/?d=mp"}
+                      fill
+                    />
+                  </div>
+                  <form action={signOut}>
+                    <button className="text-xs font-semibold text-nordic-dark/60 hover:text-mosque transition-colors uppercase tracking-wider">
+                      {t('nav.logout')}
+                    </button>
+                  </form>
+                </div>
+              ) : (
+                <Link 
+                  href="/login" 
+                  className="text-sm font-semibold text-nordic-dark hover:text-mosque transition-colors"
+                >
+                  {t('nav.login')}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
- <div className="md:hidden border-t border-nordic-dark/5 bg-background-light overflow-hidden h-0 transition-all duration-300">
- <div className="px-4 py-2 space-y-1">
- <a className="block px-3 py-2 rounded-md text-base font-medium text-mosque bg-mosque/10" href="#">Buy</a>
- <a className="block px-3 py-2 rounded-md text-base font-medium text-nordic-dark hover:bg-black/5" href="#">Rent</a>
- <a className="block px-3 py-2 rounded-md text-base font-medium text-nordic-dark hover:bg-black/5" href="#">Sell</a>
- <a className="block px-3 py-2 rounded-md text-base font-medium text-nordic-dark hover:bg-black/5" href="#">Saved Homes</a>
- </div>
- </div>
- </nav>
- );
+      <div className="md:hidden border-t border-nordic-dark/5 bg-background-light overflow-hidden h-0 transition-all duration-300">
+        <div className="px-4 py-2 space-y-1">
+          <Link className="block px-3 py-2 rounded-md text-base font-medium text-mosque bg-mosque/10" href="/">{t('nav.buy')}</Link>
+          <Link className="block px-3 py-2 rounded-md text-base font-medium text-nordic-dark hover:bg-black/5" href="#">{t('nav.rent')}</Link>
+          <Link className="block px-3 py-2 rounded-md text-base font-medium text-nordic-dark hover:bg-black/5" href="#">{t('nav.sell')}</Link>
+          <Link className="block px-3 py-2 rounded-md text-base font-medium text-nordic-dark hover:bg-black/5" href="#">{t('nav.saved')}</Link>
+        </div>
+      </div>
+    </nav>
+  );
 }

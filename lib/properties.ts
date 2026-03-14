@@ -1,4 +1,4 @@
-import { createServerClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 
 export interface Property {
   id: string;
@@ -19,7 +19,7 @@ export interface Property {
 const PAGE_SIZE = 8;
 
 export async function getFeaturedProperties(): Promise<Property[]> {
-  const supabase = createServerClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('properties')
     .select('*')
@@ -38,7 +38,7 @@ export async function getProperties(
   page: number,
   filters?: { query?: string; type?: string }
 ): Promise<{ properties: Property[]; totalCount: number; totalPages: number }> {
-  const supabase = createServerClient();
+  const supabase = await createClient();
 
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
@@ -71,7 +71,7 @@ export async function getProperties(
 }
 
 export async function getPropertyBySlug(slug: string): Promise<Property | null> {
-  const supabase = createServerClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('properties')
     .select('*')
