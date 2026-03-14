@@ -31,8 +31,8 @@ export default function Navbar() {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  // Hides the navbar only in LoginPage
-  if (pathname === '/login') return null;
+  // Hides the navbar in LoginPage and Admin pages
+  if (pathname === '/login' || pathname?.startsWith('/admin')) return null;
 
   const socialProvider = user?.app_metadata?.provider;
   const hasSocialAvatar = user?.user_metadata?.avatar_url;
