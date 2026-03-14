@@ -51,9 +51,9 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
           <button className="bg-white border border-nordic/10 text-nordic hover:bg-nordic/5 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-soft inline-flex items-center gap-2">
             <span className="material-icons text-base">filter_list</span> {t('admin.properties.filter')}
           </button>
-          <button className="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-md shadow-primary/20 transition-all transform hover:-translate-y-0.5 inline-flex items-center gap-2">
+          <Link href="/admin/properties/create" className="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-md shadow-primary/20 transition-all transform hover:-translate-y-0.5 inline-flex items-center gap-2">
             <span className="material-icons text-base">add</span> {t('admin.properties.add_new')}
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -153,9 +153,9 @@ export default async function AdminPropertiesPage({ searchParams }: PageProps) {
 
               {/* Actions */}
               <div className="col-span-12 md:col-span-2 flex items-center justify-end gap-2">
-                <button className="p-2 rounded-lg text-nordic/40 hover:text-primary hover:bg-hint-of-green/30 transition-all">
+                <Link href={`/admin/properties/${property.id}/edit`} className="p-2 rounded-lg text-nordic/40 hover:text-primary hover:bg-hint-of-green/30 transition-all">
                   <span className="material-icons text-xl">edit</span>
-                </button>
+                </Link>
                 <button className="p-2 rounded-lg text-nordic/40 hover:text-red-600 hover:bg-red-50 transition-all">
                   <span className="material-icons text-xl">delete_outline</span>
                 </button>

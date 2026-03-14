@@ -14,6 +14,11 @@ export interface Property {
   badge_color: 'mosque' | 'nordic-dark' | 'white' | null;
   is_featured: boolean;
   created_at: string;
+  description?: string;
+  property_type?: string;
+  year_built?: number;
+  parking?: number;
+  amenities?: string[];
 }
 
 const PAGE_SIZE = 8;
