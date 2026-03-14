@@ -3,14 +3,60 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import PropertyMap from "@/components/PropertyMap";
 import PropertyGallery from "@/components/PropertyGallery";
-
 import { getTranslation } from "@/lib/i18n-server";
+import type { Metadata } from "next";
+
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const property = await getPropertyBySlug(slug);
+
+  if (!property) {
+    return {
+      title: "Property Not Found | Luxe Estate",
+    };
+  }
+
+  const firstImage = property.images?.[0] ?? null;
+  const description = `${property.title} — ${property.beds} beds, ${property.baths} baths, ${property.area} m² in ${property.location}. Price: ${property.price}`;
+  const url = `https://luxe-state-main-delta.vercel.app/propiedades/${slug}`;
+
+  return {
+    title: `${property.title} | Luxe Estate`,
+    description,
+    openGraph: {
+      title: `${property.title} | Luxe Estate`,
+      description,
+      url,
+      siteName: "Luxe Estate",
+      images: firstImage
+        ? [
+            {
+              url: firstImage,
+              width: 1200,
+              height: 630,
+              alt: property.title,
+            },
+          ]
+        : [],
+      locale: "es_AR",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${property.title} | Luxe Estate`,
+      description,
+      images: firstImage ? [firstImage] : [],
+    },
+  };
+}
 
 export default async function PropertyDetailsPage({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+}: Props) {
   const { slug } = await params;
   const property = await getPropertyBySlug(slug);
   const { t } = await getTranslation();
