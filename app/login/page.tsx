@@ -1,6 +1,7 @@
 import { getTranslation } from '@/lib/i18n-server'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import GoogleSignIn from '@/components/auth/GoogleSignIn'
 import GithubSignIn from '@/components/auth/GithubSignIn'
 
@@ -16,6 +17,17 @@ export default async function LoginPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Back to home button */}
+      <div className="absolute top-6 left-6 z-20">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-sm font-medium text-nordic-muted hover:text-nordic-dark transition-all duration-200 group"
+        >
+          <span className="material-icons text-lg transition-transform group-hover:-translate-x-1">arrow_back</span>
+          Volver al inicio
+        </Link>
+      </div>
+
       {/* Background decorations */}
       <div className="absolute inset-0 pointer-events-none opacity-40">
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-accent/30 rounded-full blur-3xl"></div>
