@@ -23,6 +23,9 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  
   // Keep track of images (existing + newly uploaded)
   const [images, setImages] = useState<string[]>(initialData?.images || []);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -122,8 +125,12 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
       }
 
       if (result.success) {
-        router.push('/admin/properties');
-        router.refresh(); // Ensure list is updated
+        setSuccessMessage(initialData ? 'Propiedad actualizada con éxito' : 'Propiedad creada con éxito');
+        setShowSuccessModal(true);
+        setTimeout(() => {
+          router.push('/admin/properties');
+          router.refresh(); // Ensure list is updated
+        }, 3000); // 3 seconds delay
       } else {
         setError(result.error || 'Failed to save property');
         setIsSubmitting(false);
@@ -511,6 +518,36 @@ export default function PropertyForm({ initialData }: PropertyFormProps) {
           {initialData ? 'Update' : 'Save'}
         </button>
       </div>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col transform transition-all">
+            <div className="p-8 text-center space-y-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="material-icons text-green-500 text-3xl">check_circle</span>
+              </div>
+              <h3 className="text-2xl font-bold text-nordic">{successMessage}</h3>
+              <p className="text-sm text-gray-500 font-sf-pro">
+                Serás redirigido en unos segundos...
+              </p>
+              <div className="pt-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    router.push('/admin/properties');
+                    router.refresh();
+                  }}
+                  className="w-full bg-primary hover:bg-primary-dark text-white font-medium py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg focus:ring-2 focus:ring-primary focus:ring-offset-2 flex justify-center items-center gap-2 font-sf-pro"
+                >
+                  <span className="material-icons text-sm">arrow_back</span>
+                  Volver a propiedades
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 }
