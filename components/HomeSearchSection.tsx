@@ -88,6 +88,16 @@ export default function HomeSearchSection() {
         </div>
       </div>
 
+      <div className="absolute top-6 right-6">
+        <button 
+          onClick={() => router.push('/login')}
+          className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm border border-nordic-dark/10 rounded-full text-nordic-dark font-medium text-sm hover:bg-white hover:shadow-soft transition-all cursor-pointer"
+        >
+          <span className="material-icons text-base">login</span>
+          {t('nav.login')}
+        </button>
+      </div>
+
       <FilterModal 
         isOpen={isFilterModalOpen} 
         onClose={() => setIsFilterModalOpen(false)} 

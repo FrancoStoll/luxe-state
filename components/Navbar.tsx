@@ -8,11 +8,13 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { signOut } from '@/app/login/actions';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const supabase = createClient();
+  const pathname = usePathname();
 
   useEffect(() => {
     const getUser = async () => {
@@ -28,6 +30,14 @@ export default function Navbar() {
 
     return () => subscription.unsubscribe();
   }, [supabase]);
+
+  // Hides the navbar only in LoginPage
+  if (pathname === '/login') return null;
+
+  const socialProvider = user?.app_metadata?.provider;
+  const hasSocialAvatar = user?.user_metadata?.avatar_url;
+  const isAuthorizedProvider = socialProvider === 'google' || socialProvider === 'github';
+  const showProfile = user && isAuthorizedProvider && hasSocialAvatar;
 
   return (
     <nav className="sticky top-0 z-50 bg-background-light/95 backdrop-blur-md border-b border-nordic-dark/10 ">
@@ -66,7 +76,7 @@ export default function Navbar() {
             </button>
             
             <div className="flex items-center gap-2 pl-2 border-l border-nordic-dark/10 ml-2">
-              {user ? (
+              {showProfile ? (
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-nordic-dark/5 hover:ring-mosque transition-all relative">
                     <Image 
