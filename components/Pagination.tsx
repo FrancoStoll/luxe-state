@@ -1,4 +1,7 @@
+"use client";
+
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 interface PaginationProps {
   currentPage: number;
@@ -6,7 +9,14 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages }: PaginationProps) {
+  const searchParams = useSearchParams();
   if (totalPages <= 1) return null;
+
+  const createPageURL = (pageNumber: number | string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', pageNumber.toString());
+    return `/?${params.toString()}`;
+  };
 
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   const isFirst = currentPage === 1;
@@ -21,8 +31,8 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
         </span>
       ) : (
         <Link
-          href={`/?page=${currentPage - 1}`}
-          className="px-4 py-2 rounded-lg text-sm font-medium text-nordic-dark bg-white border border-nordic-dark/10 hover:border-mosque hover:text-mosque transition-all hover:shadow-md"
+          href={createPageURL(currentPage - 1)}
+          className="px-4 py-2 rounded-lg text-sm font-medium text-nordic-dark bg-white border border-nordic-dark/10 hover:border-mosque hover:text-mosque transition-all hover:shadow-md cursor-pointer"
         >
           ← Prev
         </Link>
@@ -42,8 +52,8 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
           ) : (
             <Link
               key={page}
-              href={`/?page=${page}`}
-              className="w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium text-nordic-muted bg-white border border-nordic-dark/5 hover:border-mosque hover:text-mosque transition-all"
+              href={createPageURL(page)}
+              className="w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium text-nordic-muted bg-white border border-nordic-dark/5 hover:border-mosque hover:text-mosque transition-all cursor-pointer"
             >
               {page}
             </Link>
@@ -58,8 +68,8 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
         </span>
       ) : (
         <Link
-          href={`/?page=${currentPage + 1}`}
-          className="px-4 py-2 rounded-lg text-sm font-medium text-nordic-dark bg-white border border-nordic-dark/10 hover:border-mosque hover:text-mosque transition-all hover:shadow-md"
+          href={createPageURL(currentPage + 1)}
+          className="px-4 py-2 rounded-lg text-sm font-medium text-nordic-dark bg-white border border-nordic-dark/10 hover:border-mosque hover:text-mosque transition-all hover:shadow-md cursor-pointer"
         >
           Next →
         </Link>

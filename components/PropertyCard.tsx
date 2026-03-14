@@ -32,11 +32,7 @@ export default function PropertyCard({ property, className = "" }: PropertyCardP
           <button className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center bg-white/90 rounded-full hover:bg-mosque hover:text-white transition-colors text-nordic-dark hover:shadow-md active:scale-95">
             <span className="material-icons text-xl leading-none">favorite_border</span>
           </button>
-          {property.is_new && (
-            <div className="absolute top-3 left-3 bg-mosque text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md uppercase tracking-wider">
-              New
-            </div>
-          )}
+
             <div className={`absolute bottom-3 left-3 ${badgeClass} rounded-full`}>
               {property.badge}
             </div>

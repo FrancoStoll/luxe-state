@@ -52,7 +52,6 @@ export default async function PropertyDetailsPage({
             images={galleryImages} 
             title={property.title}
             badge={property.badge}
-            isNew={property.is_new}
           />
 
         </div>
@@ -94,23 +93,23 @@ export default async function PropertyDetailsPage({
                   </div>
                 </div>
                 <div className="ml-auto flex gap-2">
-                  <button className="w-12 h-12 shrink-0 flex items-center justify-center rounded-full bg-mosque/10 text-mosque hover:bg-mosque hover:text-white transition-all shadow-sm hover:shadow-md">
+                  <button className="w-12 h-12 shrink-0 flex items-center justify-center rounded-full bg-mosque/10 text-mosque hover:bg-mosque hover:text-white transition-all shadow-sm hover:shadow-md cursor-pointer">
                     <span className="material-icons text-xl">chat</span>
                   </button>
-                  <button className="w-12 h-12 shrink-0 flex items-center justify-center rounded-full bg-mosque/10 text-mosque hover:bg-mosque hover:text-white transition-all shadow-sm hover:shadow-md">
+                  <button className="w-12 h-12 shrink-0 flex items-center justify-center rounded-full bg-mosque/10 text-mosque hover:bg-mosque hover:text-white transition-all shadow-sm hover:shadow-md cursor-pointer">
                     <span className="material-icons text-xl">call</span>
                   </button>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <button className="w-full bg-mosque hover:bg-mosque/90 text-white py-4 px-6 rounded-lg font-medium transition-all shadow-lg shadow-mosque/20 flex items-center justify-center gap-2 group">
+                <button className="w-full bg-mosque hover:bg-mosque/90 text-white py-4 px-6 rounded-lg font-medium transition-all shadow-lg shadow-mosque/20 flex items-center justify-center gap-2 group cursor-pointer">
                   <span className="material-icons text-xl group-hover:scale-110 transition-transform">
                     calendar_today
                   </span>
                   Schedule Visit
                 </button>
-                <button className="w-full bg-transparent border border-nordic-dark/10 hover:border-mosque text-nordic-dark hover:text-mosque py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2">
+                <button className="w-full bg-transparent border border-nordic-dark/10 hover:border-mosque text-nordic-dark hover:text-mosque py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
                   <span className="material-icons text-xl">mail_outline</span>
                   Contact Agent
                 </button>
@@ -134,7 +133,7 @@ export default async function PropertyDetailsPage({
               Property Features
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-slate-100 hover:border-mosque/20 hover:shadow-soft transition-all group">
+              <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-slate-100 hover:border-mosque/20 hover:shadow-soft transition-all group cursor-pointer">
                 <div className="w-14 h-14 aspect-square shrink-0 rounded-full bg-mosque/5 flex items-center justify-center text-mosque mb-4 group-hover:bg-mosque group-hover:text-white transition-all duration-300">
                   <span className="material-icons text-3xl">square_foot</span>
                 </div>
@@ -143,7 +142,7 @@ export default async function PropertyDetailsPage({
                   Sq Meters
                 </span>
               </div>
-              <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-slate-100 hover:border-mosque/20 hover:shadow-soft transition-all group">
+              <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-slate-100 hover:border-mosque/20 hover:shadow-soft transition-all group cursor-pointer">
                 <div className="w-14 h-14 aspect-square shrink-0 rounded-full bg-mosque/5 flex items-center justify-center text-mosque mb-4 group-hover:bg-mosque group-hover:text-white transition-all duration-300">
                   <span className="material-icons text-3xl">king_bed</span>
                 </div>
@@ -152,7 +151,7 @@ export default async function PropertyDetailsPage({
                   Bedrooms
                 </span>
               </div>
-              <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-slate-100 hover:border-mosque/20 hover:shadow-soft transition-all group">
+              <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-slate-100 hover:border-mosque/20 hover:shadow-soft transition-all group cursor-pointer">
                 <div className="w-14 h-14 aspect-square shrink-0 rounded-full bg-mosque/5 flex items-center justify-center text-mosque mb-4 group-hover:bg-mosque group-hover:text-white transition-all duration-300">
                   <span className="material-icons text-3xl">bathtub</span>
                 </div>
@@ -161,7 +160,7 @@ export default async function PropertyDetailsPage({
                   Bathrooms
                 </span>
               </div>
-              <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-slate-100 hover:border-mosque/20 hover:shadow-soft transition-all group">
+              <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-slate-100 hover:border-mosque/20 hover:shadow-soft transition-all group cursor-pointer">
                 <div className="w-14 h-14 aspect-square shrink-0 rounded-full bg-mosque/5 flex items-center justify-center text-mosque mb-4 group-hover:bg-mosque group-hover:text-white transition-all duration-300">
                   <span className="material-icons text-3xl">directions_car</span>
                 </div>
@@ -195,7 +194,7 @@ export default async function PropertyDetailsPage({
                 spa-inspired bath and private balcony views.
               </p>
             </div>
-            <button className="mt-4 text-mosque font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            <button className="mt-4 text-mosque font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all cursor-pointer">
               Read more
               <span className="material-icons text-sm">arrow_forward</span>
             </button>
@@ -260,7 +259,7 @@ export default async function PropertyDetailsPage({
                 </p>
               </div>
             </div>
-            <button className="whitespace-nowrap px-4 py-2 bg-white border border-nordic-dark/10 rounded-lg text-sm font-semibold hover:border-mosque transition-colors text-nordic-dark">
+            <button className="whitespace-nowrap px-4 py-2 bg-white border border-nordic-dark/10 rounded-lg text-sm font-semibold hover:border-mosque transition-colors text-nordic-dark cursor-pointer">
               Calculate Mortgage
             </button>
           </div>

@@ -13,7 +13,6 @@ export interface Property {
   badge: string;
   badge_color: 'mosque' | 'nordic-dark' | 'white' | null;
   is_featured: boolean;
-  is_new: boolean;
   created_at: string;
 }
 
@@ -25,7 +24,8 @@ export async function getFeaturedProperties(): Promise<Property[]> {
     .from('properties')
     .select('*')
     .eq('is_featured', true)
-    .order('created_at', { ascending: true });
+    .order('created_at', { ascending: true })
+    .limit(2);
 
   if (error) {
     console.error('Error fetching featured properties:', error);
@@ -35,17 +35,27 @@ export async function getFeaturedProperties(): Promise<Property[]> {
 }
 
 export async function getProperties(
-  page: number
+  page: number,
+  filters?: { query?: string; type?: string }
 ): Promise<{ properties: Property[]; totalCount: number; totalPages: number }> {
   const supabase = createServerClient();
 
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
-  const { data, error, count } = await supabase
+  let query = supabase
     .from('properties')
-    .select('*', { count: 'exact' })
-    .eq('is_featured', false)
+    .select('*', { count: 'exact' });
+
+  if (filters?.query) {
+    query = query.or(`title.ilike.%${filters.query}%,location.ilike.%${filters.query}%`);
+  }
+
+  if (filters?.type && filters.type !== 'All') {
+    query = query.eq('badge', `FOR ${filters.type.toUpperCase()}`);
+  }
+
+  const { data, error, count } = await query
     .order('created_at', { ascending: true })
     .range(from, to);
 

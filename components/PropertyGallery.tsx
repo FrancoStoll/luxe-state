@@ -95,7 +95,7 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
               e.stopPropagation();
               setActiveImage(prev => (prev > 0 ? prev - 1 : images.length - 1));
             }}
-            className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-nordic-dark hover:bg-white hover:text-mosque transition-all shadow-lg active:scale-90"
+            className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-nordic-dark hover:bg-white hover:text-mosque transition-all shadow-lg active:scale-90 cursor-pointer"
           >
             <span className="material-icons">chevron_left</span>
           </button>
@@ -104,7 +104,7 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
               e.stopPropagation();
               setActiveImage(prev => (prev < images.length - 1 ? prev + 1 : 0));
             }}
-            className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-nordic-dark hover:bg-white hover:text-mosque transition-all shadow-lg active:scale-90"
+            className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-nordic-dark hover:bg-white hover:text-mosque transition-all shadow-lg active:scale-90 cursor-pointer"
           >
             <span className="material-icons">chevron_right</span>
           </button>
@@ -143,7 +143,7 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
         <div className="absolute inset-y-0 -left-4 flex items-center opacity-0 group-hover/thumbs:opacity-100 transition-opacity z-30">
           <button 
             onClick={(e) => { e.stopPropagation(); scroll('left'); }} 
-            className="w-10 h-10 rounded-full bg-white shadow-2xl flex items-center justify-center text-mosque border border-slate-100 hover:scale-110 active:scale-90 transition-all"
+            className="w-10 h-10 rounded-full bg-white shadow-2xl flex items-center justify-center text-mosque border border-slate-100 hover:scale-110 active:scale-90 transition-all cursor-pointer"
           >
             <span className="material-icons">chevron_left</span>
           </button>
@@ -151,7 +151,7 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
         <div className="absolute inset-y-0 -right-4 flex items-center opacity-0 group-hover/thumbs:opacity-100 transition-opacity z-30">
           <button 
             onClick={(e) => { e.stopPropagation(); scroll('right'); }} 
-            className="w-10 h-10 rounded-full bg-white shadow-2xl flex items-center justify-center text-mosque border border-slate-100 hover:scale-110 active:scale-90 transition-all"
+            className="w-10 h-10 rounded-full bg-white shadow-2xl flex items-center justify-center text-mosque border border-slate-100 hover:scale-110 active:scale-90 transition-all cursor-pointer"
           >
             <span className="material-icons">chevron_right</span>
           </button>
@@ -171,7 +171,7 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
             </div>
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center group"
+              className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center group cursor-pointer"
             >
               <span className="material-icons text-white group-hover:rotate-90 transition-transform">close</span>
             </button>
@@ -193,13 +193,13 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
             {/* Modal Nav Arrows */}
             <button 
               onClick={() => setActiveImage(prev => (prev > 0 ? prev - 1 : images.length - 1))}
-              className="absolute left-4 sm:left-12 w-14 h-14 rounded-full bg-white/5 hover:bg-white/15 transition-all flex items-center justify-center text-white scale-90 sm:scale-100 group-hover/modal:bg-white/10"
+              className="absolute left-4 sm:left-12 w-14 h-14 rounded-full bg-white/5 hover:bg-white/15 transition-all flex items-center justify-center text-white scale-90 sm:scale-100 group-hover/modal:bg-white/10 cursor-pointer"
             >
               <span className="material-icons text-3xl">chevron_left</span>
             </button>
             <button 
               onClick={() => setActiveImage(prev => (prev < images.length - 1 ? prev + 1 : 0))}
-              className="absolute right-4 sm:right-12 w-14 h-14 rounded-full bg-white/5 hover:bg-white/15 transition-all flex items-center justify-center text-white scale-90 sm:scale-100 group-hover/modal:bg-white/10"
+              className="absolute right-4 sm:right-12 w-14 h-14 rounded-full bg-white/5 hover:bg-white/15 transition-all flex items-center justify-center text-white scale-90 sm:scale-100 group-hover/modal:bg-white/10 cursor-pointer"
             >
               <span className="material-icons text-3xl">chevron_right</span>
             </button>
@@ -212,7 +212,7 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
                 <button
                   key={index}
                   onClick={() => setActiveImage(index)}
-                  className={`flex-none w-20 aspect-square relative rounded-lg overflow-hidden transition-all duration-300 ${
+                  className={`flex-none w-20 aspect-square relative rounded-lg overflow-hidden transition-all duration-300 cursor-pointer ${
                     activeImage === index ? "ring-2 ring-white scale-110 opacity-100" : "opacity-40 hover:opacity-80"
                   }`}
                 >
