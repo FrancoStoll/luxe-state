@@ -5,9 +5,9 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const languages = [
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'pt-br', name: 'Português', flag: '🇧🇷' },
+  { code: 'es' as const, name: 'Español', flag: '🇪🇸' },
+  { code: 'en' as const, name: 'English', flag: '🇺🇸' },
+  { code: 'pt-br' as const, name: 'Português', flag: '🇧🇷' },
 ];
 
 export default function LanguageSelector() {
@@ -47,7 +47,7 @@ export default function LanguageSelector() {
 
       {isOpen && (
         <div
-          className="origin-top-right absolute right-0 mt-2 w-44 rounded-md shadow-lg bg-background-light ring-1 ring-black ring-opacity-5 focus:outline-none z-[100] animate-in fade-in zoom-in duration-200"
+          className="origin-top-right absolute right-0 mt-2 w-44 rounded-md shadow-lg bg-background-light ring-1 ring-black ring-opacity-5 focus:outline-none z-100 animate-in fade-in zoom-in duration-200"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="language-menu-button"
@@ -57,7 +57,7 @@ export default function LanguageSelector() {
               <button
                 key={lang.code}
                 onClick={() => {
-                  setLanguage(lang.code as any);
+                  setLanguage(lang.code);
                   setIsOpen(false);
                   router.refresh();
                 }}

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useTranslation } from "@/lib/contexts/LanguageContext";
 
 interface PaginationProps {
   currentPage: number;
@@ -9,6 +10,7 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages }: PaginationProps) {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   if (totalPages <= 1) return null;
 
@@ -27,14 +29,14 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       {/* Previous */}
       {isFirst ? (
         <span className="px-4 py-2 rounded-lg text-sm font-medium text-nordic-dark/30 bg-white border border-nordic-dark/5 cursor-not-allowed select-none">
-          ← Prev
+          ← {t('common.prev')}
         </span>
       ) : (
         <Link
           href={createPageURL(currentPage - 1)}
           className="px-4 py-2 rounded-lg text-sm font-medium text-nordic-dark bg-white border border-nordic-dark/10 hover:border-mosque hover:text-mosque transition-all hover:shadow-md cursor-pointer"
         >
-          ← Prev
+          ← {t('common.prev')}
         </Link>
       )}
 
@@ -64,14 +66,14 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       {/* Next */}
       {isLast ? (
         <span className="px-4 py-2 rounded-lg text-sm font-medium text-nordic-dark/30 bg-white border border-nordic-dark/5 cursor-not-allowed select-none">
-          Next →
+          {t('common.next')} →
         </span>
       ) : (
         <Link
           href={createPageURL(currentPage + 1)}
           className="px-4 py-2 rounded-lg text-sm font-medium text-nordic-dark bg-white border border-nordic-dark/10 hover:border-mosque hover:text-mosque transition-all hover:shadow-md cursor-pointer"
         >
-          Next →
+          {t('common.next')} →
         </Link>
       )}
     </div>

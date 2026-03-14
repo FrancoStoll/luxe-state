@@ -27,16 +27,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const savedLang = Cookies.get('user-language') as Language;
+    let initialLang: Language = 'es';
+    
     if (savedLang && ['es', 'en', 'pt-br'].includes(savedLang)) {
-      setLanguageState(savedLang);
+      initialLang = savedLang;
     } else {
-      // Try to detect browser language
       const browserLang = navigator.language.split('-')[0];
-      if (browserLang === 'en') setLanguageState('en');
-      else if (browserLang === 'pt') setLanguageState('pt-br');
-      else setLanguageState('es'); // Default
+      if (browserLang === 'en') initialLang = 'en';
+      else if (browserLang === 'pt') initialLang = 'pt-br';
     }
-  }, []);
+    
+    if (initialLang !== language) {
+      setLanguageState(initialLang);
+    }
+  }, [language]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
@@ -45,14 +49,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const t = (key: string) => {
     const keys = key.split('.');
-    let current: Record<string, any> = translations[language];
+    let current: unknown = translations[language];
     
     for (const k of keys) {
-      if (current[k] === undefined) return key;
-      current = current[k];
+      if (current === null || typeof current !== 'object' || (current as Record<string, unknown>)[k] === undefined) return key;
+      current = (current as Record<string, unknown>)[k];
     }
     
-    return current as unknown as string;
+    return typeof current === 'string' ? current : key;
   };
 
   return (

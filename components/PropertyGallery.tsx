@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import { useTranslation } from "@/lib/contexts/LanguageContext";
 
 interface PropertyGalleryProps {
   images: string[];
@@ -11,6 +12,7 @@ interface PropertyGalleryProps {
 }
 
 export default function PropertyGallery({ images, title, badge, isNew }: PropertyGalleryProps) {
+  const { t } = useTranslation();
   const [activeImage, setActiveImage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -72,7 +74,7 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
           )}
           {isNew && (
             <span className="bg-white/95 backdrop-blur-md text-nordic-dark text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
-              New
+              {t('common.new')}
             </span>
           )}
         </div>
@@ -85,7 +87,7 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
           className="absolute bottom-5 right-5 bg-white/90 hover:bg-white text-nordic-dark px-5 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-xl backdrop-blur-md transition-all flex items-center gap-2 border border-white/20 active:scale-95 z-20"
         >
           <span className="material-icons text-[14px]">grid_view</span>
-          {images.length} Photos
+          {images.length} {t('property.photos_button')}
         </button>
 
         {/* Hero Navigation Arrows */}
@@ -166,7 +168,7 @@ export default function PropertyGallery({ images, title, badge, isNew }: Propert
             <div>
               <h3 className="text-xl font-light tracking-wide">{title}</h3>
               <p className="text-white/50 text-xs font-medium uppercase tracking-[0.2em]">
-                Photo {activeImage + 1} of {images.length}
+                {t('property.photo_counter') ? t('property.photo_counter').replace('{current}', (activeImage + 1).toString()).replace('{total}', images.length.toString()) : `Photo ${activeImage + 1} of ${images.length}`}
               </p>
             </div>
             <button 
